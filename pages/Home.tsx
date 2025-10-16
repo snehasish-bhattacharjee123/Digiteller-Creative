@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import {
-  TrendingUp,
-  Target,
-  Award,
-  Users,
-  Sparkles,
+  Play,
   ArrowRight,
-  CheckCircle
+  Check,
+  X,
+  Users,
+  Award,
+  Clock
 } from 'lucide-react';
 import AOS from 'aos';
 import './Home.css';
@@ -19,80 +18,253 @@ const Home = () => {
       once: true,
       easing: 'ease-out-cubic'
     });
+
+    // Video modal functionality
+    const playBtn = document.getElementById('mainVideoPlay');
+    const modal = document.getElementById('videoModal');
+    const closeBtn = document.getElementById('closeVideoBtn');
+    const videoPlayer = document.getElementById('modalVideoPlayer') as HTMLVideoElement;
+
+    if (playBtn && modal && closeBtn && videoPlayer) {
+      playBtn.addEventListener('click', () => {
+        // Set video source (you can replace this with your actual video URL)
+        videoPlayer.src = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+        modal.classList.add('active');
+        videoPlayer.play();
+      });
+
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+        videoPlayer.pause();
+        videoPlayer.currentTime = 0;
+      });
+
+      // Close modal when clicking outside the video
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          videoPlayer.pause();
+          videoPlayer.currentTime = 0;
+        }
+      });
+
+      // Close modal with Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          modal.classList.remove('active');
+          videoPlayer.pause();
+          videoPlayer.currentTime = 0;
+        }
+      });
+    }
+
+    // Work section horizontal scroll with mouse drag
+    const workScrollWrapper = document.querySelector('.work-scroll-wrapper') as HTMLElement;
+    
+    if (workScrollWrapper) {
+      let isDragging = false;
+      let startX: number;
+      let scrollLeft: number;
+      let velocity = 0;
+      let momentumId: number;
+
+      const handleMouseDown = (e: MouseEvent) => {
+        isDragging = true;
+        workScrollWrapper.style.cursor = 'grabbing';
+        startX = e.pageX - workScrollWrapper.offsetLeft;
+        scrollLeft = workScrollWrapper.scrollLeft;
+        velocity = 0;
+        
+        if (momentumId) {
+          cancelAnimationFrame(momentumId);
+        }
+      };
+
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!isDragging) return;
+        
+        e.preventDefault();
+        const x = e.pageX - workScrollWrapper.offsetLeft;
+        const walk = (x - startX) * 2; // Scroll speed multiplier
+        workScrollWrapper.scrollLeft = scrollLeft - walk;
+        
+        // Calculate velocity for momentum scrolling
+        velocity = scrollLeft - workScrollWrapper.scrollLeft;
+      };
+
+      const handleMouseUp = () => {
+        if (!isDragging) return;
+        
+        isDragging = false;
+        workScrollWrapper.style.cursor = 'grab';
+        
+        // Add momentum scrolling
+        if (Math.abs(velocity) > 0.5) {
+          const momentumScroll = () => {
+            if (Math.abs(velocity) > 0.1) {
+              workScrollWrapper.scrollLeft -= velocity;
+              velocity *= 0.95; // Friction
+              momentumId = requestAnimationFrame(momentumScroll);
+            }
+          };
+          momentumScroll();
+        }
+      };
+
+      // Touch events for mobile
+      const handleTouchStart = (e: TouchEvent) => {
+        isDragging = true;
+        startX = e.touches[0].pageX - workScrollWrapper.offsetLeft;
+        scrollLeft = workScrollWrapper.scrollLeft;
+        velocity = 0;
+      };
+
+      const handleTouchMove = (e: TouchEvent) => {
+        if (!isDragging) return;
+        
+        const x = e.touches[0].pageX - workScrollWrapper.offsetLeft;
+        const walk = (x - startX) * 2;
+        workScrollWrapper.scrollLeft = scrollLeft - walk;
+        velocity = scrollLeft - workScrollWrapper.scrollLeft;
+      };
+
+      const handleTouchEnd = () => {
+        isDragging = false;
+        
+        if (Math.abs(velocity) > 0.5) {
+          const momentumScroll = () => {
+            if (Math.abs(velocity) > 0.1) {
+              workScrollWrapper.scrollLeft -= velocity;
+              velocity *= 0.95;
+              momentumId = requestAnimationFrame(momentumScroll);
+            }
+          };
+          momentumScroll();
+        }
+      };
+
+      // Mouse events
+      workScrollWrapper.addEventListener('mousedown', handleMouseDown);
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      // Touch events
+      workScrollWrapper.addEventListener('touchstart', handleTouchStart);
+      workScrollWrapper.addEventListener('touchmove', handleTouchMove);
+      workScrollWrapper.addEventListener('touchend', handleTouchEnd);
+
+      // Cleanup function
+      return () => {
+        workScrollWrapper.removeEventListener('mousedown', handleMouseDown);
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        workScrollWrapper.removeEventListener('touchstart', handleTouchStart);
+        workScrollWrapper.removeEventListener('touchmove', handleTouchMove);
+        workScrollWrapper.removeEventListener('touchend', handleTouchEnd);
+        
+        if (momentumId) {
+          cancelAnimationFrame(momentumId);
+        }
+      };
+    }
   }, []);
 
-  const services = [
-    { title: 'Social Media Marketing', icon: '📱' },
-    { title: 'Video Production & Photography', icon: '🎥' },
-    { title: 'SEO', icon: '🔍' },
-    { title: 'Logo Design & Brand Setup', icon: '🎨' },
-    { title: 'Digital Strategy & Consulting', icon: '💡' },
-    { title: 'Social Media Management', icon: '📊' },
-    { title: 'Website Design & Development', icon: '💻' },
-    { title: '2D & 3D Animation', icon: '✨' }
+  const trustedBrands = [
+    'Colgate Palmolive', 'CRITEO', 'Databricks', 'Figma', 'Grammarly',
+    'Meta', 'Notion', 'Palo Alto Networks', 'Pernod Ricard', 'Reddit'
   ];
 
-  const whyChooseUs = [
-    { icon: Sparkles, title: 'Creative Experts', desc: 'Innovative solutions tailored to your brand' },
-    { icon: TrendingUp, title: 'ROI-Focused', desc: 'Data-driven strategies that deliver results' },
-    { icon: Target, title: 'End-to-End Solutions', desc: 'Complete digital marketing ecosystem' },
-    { icon: Award, title: 'Proven Track Record', desc: 'Trusted by brands across industries' }
+  const benefitsComparison = [
+    {
+      category: 'Superside',
+      speed: true,
+      flexibility: true,
+      quality: true,
+      scalability: true,
+      cost: true
+    },
+    {
+      category: 'In-house team',
+      speed: false,
+      flexibility: false,
+      quality: true,
+      scalability: true,
+      cost: false
+    },
+    {
+      category: 'Creative agencies',
+      speed: false,
+      flexibility: false,
+      quality: true,
+      scalability: true,
+      cost: false
+    },
+    {
+      category: 'Freelancers',
+      speed: false,
+      flexibility: false,
+      quality: true,
+      scalability: true,
+      cost: true
+    },
+    {
+      category: 'Self-service tools',
+      speed: false,
+      flexibility: false,
+      quality: true,
+      scalability: true,
+      cost: false
+    }
   ];
 
   return (
     <div className="home">
-      <section className="hero">
+      {/* Hero Section */}
+      <section className="hero-section">
         <div className="hero-background">
-          <div className="geometric-shape shape-1"></div>
-          <div className="geometric-shape shape-2"></div>
-          <div className="geometric-shape shape-3"></div>
+          <div className="hero-video-bg"></div>
         </div>
-
         <div className="container">
-          <div className="hero-content" data-aos="fade-up">
-            <h1 className="hero-title">
-              Your Growth Partner in the <span className="gradient-text">Digital World</span>
-            </h1>
-            <p className="hero-subtitle">
-              Empowering brands through digital creativity and smart marketing
-            </p>
-            <a href="#contact" className="cta-button">
-              Let's Grow Together
-              <ArrowRight size={20} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section className="about section-padding" data-aos="fade-up">
-        <div className="container">
-          <div className="about-content">
-            <div className="about-text">
-              <h2 className="section-title">About Us</h2>
-              <p className="section-description">
-                At <strong>Digiteller Creative</strong>, we believe every brand has a unique story to tell.
-                Our mission is to help you craft and share that story with the world through innovative
-                digital marketing strategies, stunning creative content, and measurable results.
+          <div className="hero-layout">
+            <div className="hero-content" data-aos="fade-up">
+              <h1 className="hero-title">
+                Your creative team's <span className="highlight-text">creative team</span><sup>TM</sup>
+              </h1>
+              <p className="hero-subtitle">
+                Scale your in-house creative team with top global talent powered by industry-leading AI workflows, delivering anything you can imagine fast and affordably.
               </p>
-              <p className="section-description">
-                We're not just another agency – we're your growth partners, committed to understanding
-                your vision and turning it into digital success.
-              </p>
-              <div className="about-stats">
-                <div className="stat">
-                  <Users size={32} />
-                  <h3>50+</h3>
-                  <p>Happy Clients</p>
+              <button className="cta-button-primary">
+                Book a demo
+              </button>
+            </div>
+            <div className="hero-images">
+              <div className="image-collage">
+                <div className="collage-item item-1">
+                  <div className="portfolio-image reddit-bg"></div>
                 </div>
-                <div className="stat">
-                  <Award size={32} />
-                  <h3>100+</h3>
-                  <p>Projects Delivered</p>
+                <div className="collage-item item-2">
+                  <div className="portfolio-image opa-bg"></div>
                 </div>
-                <div className="stat">
-                  <TrendingUp size={32} />
-                  <h3>95%</h3>
-                  <p>Client Satisfaction</p>
+                <div className="collage-item item-3">
+                  <div className="portfolio-image oyster-bg"></div>
+                </div>
+                <div className="collage-item item-4">
+                  <div className="portfolio-image pernod-bg"></div>
+                </div>
+                <div className="collage-item item-5">
+                  <div className="portfolio-image adius-bg"></div>
+                </div>
+                <div className="collage-item item-6">
+                  <div className="portfolio-image zapier-bg"></div>
+                </div>
+                <div className="collage-item item-7">
+                  <div className="portfolio-image gohenry-bg"></div>
+                </div>
+                <div className="collage-item item-8">
+                  <div className="portfolio-image kins-bg"></div>
+                </div>
+                <div className="collage-item item-9">
+                  <div className="portfolio-image vimeo-bg"></div>
                 </div>
               </div>
             </div>
@@ -100,62 +272,377 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="services section-padding" id="services">
+      {/* Video Section */}
+      <section className="video-section">
         <div className="container">
-          <h2 className="section-title text-center" data-aos="fade-up">Our Services</h2>
-          <p className="section-description text-center" data-aos="fade-up" data-aos-delay="100">
-            Comprehensive digital solutions to elevate your brand
-          </p>
+          <div className="video-content" data-aos="fade-up">
+            <div className="video-text">
+              <span className="section-label">A NEW ERA OF CREATIVE WORK</span>
+              <h2 className="video-title">Help your</h2>
+            </div>
+            <div className="video-play-button">
+              <button className="play-btn">
+                <Play size={32} fill="currentColor" />
+              </button>
+              <span className="play-text">Play video</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-          <div className="services-grid">
-            {services.map((service, index) => (
-              <div
-                key={index}
-                className="service-card"
-                data-aos="fade-up"
-                data-aos-delay={index * 100}
-              >
-                <div className="service-icon">{service.icon}</div>
-                <h3>{service.title}</h3>
+      {/* Trust Section */}
+      <section className="trust-section">
+        <div className="container">
+          <h2 className="trust-title" data-aos="fade-up">
+            Trusted by 500+ of the world's top brands
+          </h2>
+          <div className="logo-animation-container" data-aos="fade-up" data-aos-delay="200">
+            <div className="logo-row row-1">
+              {trustedBrands.map((brand, index) => (
+                <div key={`row1-${index}`} className="brand-logo">
+                  {brand}
+                </div>
+              ))}
+              {trustedBrands.map((brand, index) => (
+                <div key={`row1-duplicate-${index}`} className="brand-logo">
+                  {brand}
+                </div>
+              ))}
+            </div>
+            <div className="logo-row row-2">
+              {[...trustedBrands].reverse().map((brand, index) => (
+                <div key={`row2-${index}`} className="brand-logo">
+                  {brand}
+                </div>
+              ))}
+              {[...trustedBrands].reverse().map((brand, index) => (
+                <div key={`row2-duplicate-${index}`} className="brand-logo">
+                  {brand}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Perfect Fit Section */}
+      <section className="perfect-fit-section">
+        <div className="container">
+          <div className="perfect-fit-header" data-aos="fade-up">
+            <span className="section-label">OUR DIFFERENCE</span>
+            <h2 className="perfect-fit-title">
+              Superside is the <em>perfect fit</em> for fast moving brands
+            </h2>
+          </div>
+          <div className="perfect-fit-grid" data-aos="fade-up" data-aos-delay="200">
+            <div className="perfect-fit-card">
+              <div className="perfect-fit-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <div className="perfect-fit-content">
+                <span className="perfect-fit-label">SCALABLE</span>
+                <h3 className="perfect-fit-card-title">Boost your in-house creative</h3>
+                <p className="perfect-fit-description">
+                  We handle the heavy lifting so you can focus on strategic, high-impact work without adding overhead to the team.
+                </p>
+              </div>
+            </div>
+            <div className="perfect-fit-card">
+              <div className="perfect-fit-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 7V17C3 18.1046 3.89543 19 5 19H9V13H15V19H19C20.1046 19 21 18.1046 21 17V7L12 2L3 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M9 13H15V19H9V13Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <div className="perfect-fit-content">
+                <span className="perfect-fit-label">FLEXIBLE</span>
+                <h3 className="perfect-fit-card-title">Say yes to more projects</h3>
+                <p className="perfect-fit-description">
+                  Whether you need more bandwidth or different skills, Superside has whatever resources you need to get the job done.
+                </p>
+              </div>
+            </div>
+            <div className="perfect-fit-card">
+              <div className="perfect-fit-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="12,2 22,12 12,22 2,12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                  <path d="M12 8V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M8 12H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <div className="perfect-fit-content">
+                <span className="perfect-fit-label">RESPONSIVE</span>
+                <h3 className="perfect-fit-card-title">Don't sacrifice quality for speed</h3>
+                <p className="perfect-fit-description">
+                  Our global team of creatives delivers agency-level work in a fraction of the time.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Creative Team Support Section */}
+      <section className="creative-team-section">
+        <div className="container">
+          <div className="creative-team-layout">
+            <div className="creative-team-content" data-aos="fade-up">
+              <span className="section-label">A NEW ERA OF CREATIVE WORK</span>
+              <h2 className="creative-team-title">
+                The support your creative team <em>has been asking for</em>
+              </h2>
+              <p className="creative-team-description">
+                Superside is your dedicated, on-call creative team to expand your production capacity and extend your team's creative capabilities.
+              </p>
+              <p className="creative-team-subtitle">
+                See us as an extension of your team, freeing you to focus on your most impactful and creative work.
+              </p>
+              <button className="cta-button-primary">
+                Book a demo
+              </button>
+            </div>
+            <div className="creative-team-media">
+              <div className="video-grid-container">
+                <div className="video-grid">
+                  <div className="video-item item-1">
+                    <div className="profile-image profile-1"></div>
+                  </div>
+                  <div className="video-item item-2">
+                    <div className="profile-image profile-2"></div>
+                  </div>
+                  <div className="video-item item-3">
+                    <div className="profile-image profile-3"></div>
+                  </div>
+                  <div className="video-item item-4">
+                    <div className="profile-image profile-4"></div>
+                  </div>
+                  <div className="video-item item-5">
+                    <div className="profile-image profile-5"></div>
+                  </div>
+                  <div className="video-item item-6">
+                    <div className="profile-image profile-6"></div>
+                  </div>
+                  <div className="video-item item-7">
+                    <div className="profile-image profile-7"></div>
+                  </div>
+                  <div className="video-item item-8">
+                    <div className="profile-image profile-8"></div>
+                  </div>
+                </div>
+                <div className="video-play-overlay">
+                  <button className="main-play-btn" id="mainVideoPlay">
+                    <Play size={48} fill="currentColor" />
+                  </button>
+                  <div className="video-modal" id="videoModal">
+                    <div className="video-modal-content">
+                      <button className="close-video-btn" id="closeVideoBtn">
+                        <X size={24} />
+                      </button>
+                      <video className="modal-video" controls id="modalVideoPlayer">
+                        <source src="" type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Made to Flex Section */}
+      <section className="made-to-flex-section">
+        <div className="container">
+          <div className="made-to-flex-content" data-aos="fade-up">
+            <span className="section-label">MADE TO FLEX</span>
+            <h2 className="made-to-flex-title">
+              Supertalented. Superfast. Super responsive. Work with a global team that's purposefully made to keep up with you.
+            </h2>
+            <div className="flex-cards-grid">
+              <div className="flex-card">
+                <div className="flex-card-image talent-bg">
+                  <div className="card-text">
+                    <h3>Top global creative talent</h3>
+                  </div>
+                </div>
+              </div>
+              <div className="flex-card">
+                <div className="flex-card-image laptop-bg">
+                  <div className="card-text">
+                    <h3>Ultra-fast turnaround times</h3>
+                    <p>With dedicated project managers, collaborative online tools and the expert use of AI, projects can be completed in as little as 12 hours.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex-card">
+                <div className="flex-card-image shopify-bg">
+                  <div className="card-text">
+                    <h3>Flexible subscription model</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Value Proposition */}
+      <section className="value-prop-section">
+        <div className="container">
+          <div className="value-prop-content" data-aos="fade-up">
+            <span className="section-label">MADE TO FLEX</span>
+            <h2 className="value-prop-title">
+              Supertalented. Superfast. Super responsive. Work with a global team that's purposefully made to keep up with you.
+            </h2>
+            <div className="value-prop-grid">
+              <div className="value-card">
+                <div className="value-icon">
+                  <Users size={32} />
+                </div>
+                <h3>Top global creative talent</h3>
+                <p>We're not restricted by borders. Top-tier talent, powered by AI means consistently high-quality work for your brand.</p>
+              </div>
+              <div className="value-card">
+                <div className="value-icon">
+                  <Clock size={32} />
+                </div>
+                <h3>With dedicated project managers</h3>
+                <p>With dedicated project managers, collaborative online tools and the expert use of AI, projects can be completed in as little as 12 hours.</p>
+              </div>
+              <div className="value-card">
+                <div className="value-icon">
+                  <Award size={32} />
+                </div>
+                <h3>Access a broad range of</h3>
+                <p>Access a broad range of talent as and when you need it and work more efficiently, so you never waste a dollar.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Success Metrics */}
+      <section className="success-section">
+        <div className="container">
+          <span className="section-label">SUCCESS IN NUMBERS</span>
+          <h2 className="success-title">The best return on your investment</h2>
+          <div className="metrics-grid">
+            <div className="metric-card">
+              <div className="metric-number">500+</div>
+              <p>Startup, enterprises and mid-market companies trust Superside to deliver pixel-perfect creative, at scale.</p>
+            </div>
+            <div className="metric-card">
+              <div className="metric-number">70k+</div>
+              <p>Projects delivered to this day and counting.</p>
+            </div>
+            <div className="metric-card">
+              <div className="metric-number">94%</div>
+              <p>Brands see a three-year ROI of 94% on their Superside subscription.</p>
+              <a href="#" className="metric-link">Read more in the Forrester TEI report ↗</a>
+            </div>
+            <div className="metric-card">
+              <div className="metric-number">6 months</div>
+              <p>Brands see a 6-month payback period on their Superside subscription.</p>
+              <a href="#" className="metric-link">Read more in the Forrester TEI report ↗</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Comparison */}
+      <section className="comparison-section">
+        <div className="container">
+          <div className="comparison-table" data-aos="fade-up">
+            <div className="comparison-header">
+              <div></div>
+              <div>Speed</div>
+              <div>Flexibility</div>
+              <div>Quality</div>
+              <div>Scalability</div>
+              <div>Cost-effectiveness</div>
+            </div>
+            {benefitsComparison.map((item, index) => (
+              <div key={index} className={`comparison-row ${index === 0 ? 'featured' : ''}`}>
+                <div className="comparison-category">{item.category}</div>
+                <div className="comparison-item">
+                  {item.speed ? <Check className="check-icon" /> : <X className="x-icon" />}
+                </div>
+                <div className="comparison-item">
+                  {item.flexibility ? <Check className="check-icon" /> : <X className="x-icon" />}
+                </div>
+                <div className="comparison-item">
+                  {item.quality ? <Check className="check-icon" /> : <X className="x-icon" />}
+                </div>
+                <div className="comparison-item">
+                  {item.scalability ? <Check className="check-icon" /> : <X className="x-icon" />}
+                </div>
+                <div className="comparison-item">
+                  {item.cost ? <Check className="check-icon" /> : <X className="x-icon" />}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="why-choose section-padding" data-aos="fade-up">
+      {/* Work Section */}
+      <section className="work-section">
         <div className="container">
-          <h2 className="section-title text-center">Why Choose Us</h2>
-          <p className="section-description text-center">
-            What sets us apart in the digital landscape
-          </p>
-
-          <div className="why-grid">
-            {whyChooseUs.map((item, index) => (
-              <div
-                key={index}
-                className="why-card"
-                data-aos="zoom-in"
-                data-aos-delay={index * 100}
-              >
-                <item.icon size={40} className="why-icon" />
-                <h3>{item.title}</h3>
-                <p>{item.desc}</p>
+          <div className="work-header">
+            <span className="section-label">EASY & HASSLE-FREE</span>
+            <h2 className="work-title">Every type of creative work you'll ever need, and more</h2>
+          </div>
+          <div className="work-scroll-container">
+            <div className="work-scroll-wrapper">
+              <div className="work-card website-design">
+                <div className="work-card-overlay"></div>
+                <div className="work-card-content">
+                  <h3>Website Design</h3>
+                </div>
               </div>
-            ))}
+              <div className="work-card social-media">
+                <div className="work-card-overlay"></div>
+                <div className="work-card-content">
+                  <h3>Social Media Creative</h3>
+                </div>
+              </div>
+              <div className="work-card email-design">
+                <div className="work-card-overlay"></div>
+                <div className="work-card-content">
+                  <h3>Email Design</h3>
+                </div>
+              </div>
+              <div className="work-card motion-design">
+                <div className="work-card-overlay"></div>
+                <div className="work-card-content">
+                  <h3>Motion Design</h3>
+                </div>
+              </div>
+              <div className="work-card video-production">
+                <div className="work-card-overlay"></div>
+                <div className="work-card-content">
+                  <h3>Video Production</h3>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="cta-section" data-aos="fade-up" id="contact">
+      {/* CTA Section */}
+      <section className="cta-section">
         <div className="container">
           <div className="cta-content">
-            <h2>Let's Start Building Your Brand Today</h2>
-            <p>Ready to take your digital presence to the next level?</p>
-            <Link to="/contact" className="cta-button-secondary">
-              Get In Touch
+            <h2>Tech enabled and made to work for you.</h2>
+            <button className="cta-button-secondary">
+              Book a demo
               <ArrowRight size={20} />
-            </Link>
+            </button>
           </div>
         </div>
       </section>
@@ -164,3 +651,5 @@ const Home = () => {
 };
 
 export default Home;
+
+

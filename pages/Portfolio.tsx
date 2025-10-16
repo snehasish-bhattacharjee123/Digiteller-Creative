@@ -4,7 +4,15 @@ import { X } from 'lucide-react';
 import './Portfolio.css';
 
 const Portfolio = () => {
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [selectedProject, setSelectedProject] = useState<{
+    id: number;
+    title: string;
+    category: string;
+    image: string;
+    description: string;
+    client: string;
+    results: string[];
+  } | null>(null);
 
   useEffect(() => {
     AOS.init({
@@ -18,7 +26,7 @@ const Portfolio = () => {
       id: 1,
       title: 'Brand Refresh Campaign',
       category: 'Social Media Marketing',
-      image: 'https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
       description: 'Complete social media makeover for a lifestyle brand, resulting in 300% engagement increase.',
       client: 'Lifestyle Co.',
       results: ['300% increase in engagement', '50k new followers', '2M+ impressions']
@@ -27,7 +35,7 @@ const Portfolio = () => {
       id: 2,
       title: 'Product Launch Video',
       category: 'Video Production',
-      image: 'https://images.pexels.com/photos/3062541/pexels-photo-3062541.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
       description: 'High-energy promotional video for tech startup product launch.',
       client: 'TechStart Inc.',
       results: ['1M+ views', '15% conversion rate', 'Featured in tech blogs']
@@ -36,7 +44,7 @@ const Portfolio = () => {
       id: 3,
       title: 'E-commerce SEO Success',
       category: 'SEO',
-      image: 'https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
       description: 'Complete SEO overhaul for online store, boosting organic traffic dramatically.',
       client: 'ShopSmart',
       results: ['250% organic traffic growth', 'Page 1 rankings for 50+ keywords', '40% revenue increase']
@@ -45,7 +53,7 @@ const Portfolio = () => {
       id: 4,
       title: 'Modern Brand Identity',
       category: 'Logo & Branding',
-      image: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
       description: 'Complete brand identity system for emerging coffee chain.',
       client: 'BrewCraft Coffee',
       results: ['Memorable brand identity', 'Consistent across all touchpoints', 'Positive customer feedback']
@@ -54,7 +62,7 @@ const Portfolio = () => {
       id: 5,
       title: '3D Product Visualization',
       category: '3D Animation',
-      image: 'https://images.pexels.com/photos/3945683/pexels-photo-3945683.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://images.unsplash.com/photo-1592478411213-6153e4ebc696?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
       description: 'Photorealistic 3D renders for furniture e-commerce platform.',
       client: 'HomeLux Furniture',
       results: ['30% increase in conversions', 'Reduced return rates', 'Enhanced customer experience']
@@ -63,7 +71,7 @@ const Portfolio = () => {
       id: 6,
       title: 'Website Redesign',
       category: 'Web Development',
-      image: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
       description: 'Modern, responsive website for professional services firm.',
       client: 'ProConsult',
       results: ['50% faster load times', 'Mobile-first design', '60% increase in leads']
@@ -112,7 +120,7 @@ const Portfolio = () => {
                 onClick={() => setSelectedProject(project)}
               >
                 <div className="portfolio-image">
-                  <img src={project.image} alt={project.title} />
+                  <img src={project.image} alt={project.title} loading="lazy" />
                   <div className="portfolio-overlay">
                     <span className="portfolio-category">{project.category}</span>
                     <h3>{project.title}</h3>
@@ -131,7 +139,7 @@ const Portfolio = () => {
               <X size={24} />
             </button>
 
-            <img src={selectedProject.image} alt={selectedProject.title} />
+            <img src={selectedProject.image} alt={selectedProject.title} loading="lazy" />
 
             <div className="modal-details">
               <span className="modal-category">{selectedProject.category}</span>

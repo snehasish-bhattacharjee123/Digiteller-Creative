@@ -5,12 +5,13 @@
 }
 
 :root {
-  --primary-teal: #2BB3A8;
-  --secondary-navy: #0C0C0C;
-  --accent-lime: #D8E300;
+  --primary-dark: #0a1e1f;
+  --secondary-dark: #1a3a3a;
+  --accent-green: #d4ff04;
   --text-light: #ffffff;
-  --text-gray: #7A7A7A;
-  --bg-dark: #1C1C1C;
+  --text-gray: #b8c8c8;
+  --text-dark: #2d3748;
+  --bg-light: #f5f7f7;
 }
 
 body {
@@ -39,10 +40,12 @@ button {
 }
 
 img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
+   max-width: 100%;
+   height: auto;
+   display: block;
+   object-fit: cover;
+   transition: transform 0.3s ease;
+ }
 
 .container {
   max-width: 1200px;

@@ -1,5 +1,4 @@
-import { Instagram, Phone, Mail, Zap } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Linkedin, Facebook, Instagram, Phone, Globe } from 'lucide-react';
 import './Footer.css';
 
 const Footer = () => {
@@ -7,47 +6,43 @@ const Footer = () => {
     <footer className="footer">
       <div className="container">
         <div className="footer-content">
-          <div className="footer-section">
+          <div className="footer-left">
             <div className="footer-logo">
-              <Zap size={32} />
-              <span>Digiteller Creative</span>
+              <span>Superside</span>
             </div>
-            <p className="footer-tagline">
-              Your Growth Partner in the Digital World
+            <p className="footer-copyright">
+              © 2025 Superside. All rights reserved.
             </p>
           </div>
 
-          <div className="footer-section">
-            <h3>Quick Links</h3>
-            <div className="footer-links">
-              <Link to="/">Home</Link>
-              <Link to="/services">Services</Link>
-              <Link to="/portfolio">Portfolio</Link>
-              <Link to="/contact">Contact</Link>
+          <div className="footer-center">
+            <div className="footer-legal-links">
+              <a href="/privacy">Privacy policy</a>
+              <a href="/terms">Terms of use</a>
+              <a href="/status">Status page</a>
+              <a href="/dmca">DMCA</a>
             </div>
           </div>
 
-          <div className="footer-section">
-            <h3>Get In Touch</h3>
-            <div className="footer-contact">
-              <a href="tel:7998596948" className="contact-item">
-                <Phone size={18} />
-                <span>79985 96948</span>
+          <div className="footer-right">
+            <div className="footer-social">
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-link">
+                <Linkedin size={20} />
               </a>
-              <a href="https://instagram.com/digitellercreative" target="_blank" rel="noopener noreferrer" className="contact-item">
-                <Instagram size={18} />
-                <span>@digitellercreative</span>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-link">
+                <Facebook size={20} />
               </a>
-              <a href="mailto:contact@digitellercreative.com" className="contact-item">
-                <Mail size={18} />
-                <span>contact@digitellercreative.com</span>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-link">
+                <Instagram size={20} />
+              </a>
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-link">
+                <Globe size={20} />
+              </a>
+              <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="social-link">
+                <Globe size={20} />
               </a>
             </div>
           </div>
-        </div>
-
-        <div className="footer-bottom">
-          <p>&copy; 2025 Digiteller Creative. All rights reserved.</p>
         </div>
       </div>
     </footer>
