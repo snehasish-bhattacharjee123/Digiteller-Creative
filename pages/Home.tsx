@@ -222,49 +222,88 @@ const Home = () => {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-background">
-          <div className="hero-video-bg"></div>
+          <div className="hero-gradient-bg"></div>
+          <div className="hero-blur-overlay"></div>
         </div>
-        <div className="container">
+        <div className="hero-container">
           <div className="hero-layout">
-            <div className="hero-content" data-aos="fade-up">
-              <h1 className="hero-title">
-                Your creative team's <span className="highlight-text">creative team</span><sup>TM</sup>
+            <div className="hero-text-content">
+              <h1 className="hero-main-title">
+                Your creative team's <span className="hero-highlight">creative team</span><sup className="trademark">™</sup>
               </h1>
-              <p className="hero-subtitle">
+              <p className="hero-description">
                 Scale your in-house creative team with top global talent powered by industry-leading AI workflows, delivering anything you can imagine fast and affordably.
               </p>
-              <button className="cta-button-primary">
-                Book a demo
-              </button>
+              <div className="hero-cta">
+                <button className="hero-btn-primary">
+                  Book a demo
+                </button>
+              </div>
             </div>
-            <div className="hero-images">
-              <div className="image-collage">
-                <div className="collage-item item-1">
-                  <div className="portfolio-image reddit-bg"></div>
+            <div className="hero-visual-showcase">
+              <div className="projects-grid">
+                <div className="project-card zapier-card">
+                  <div className="project-image zapier-bg">
+                    <div className="project-overlay">
+                      <span className="project-label">Zapier</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="collage-item item-2">
-                  <div className="portfolio-image opa-bg"></div>
+                <div className="project-card curriculum-card">
+                  <div className="project-image curriculum-bg">
+                    <div className="project-overlay">
+                      <span className="project-label">Curriculum</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="collage-item item-3">
-                  <div className="portfolio-image oyster-bg"></div>
+                <div className="project-card vimeo-card">
+                  <div className="project-image vimeo-bg">
+                    <div className="project-overlay">
+                      <span className="project-label">Vimeo</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="collage-item item-4">
-                  <div className="portfolio-image pernod-bg"></div>
+                <div className="project-card roland-card">
+                  <div className="project-image roland-bg">
+                    <div className="project-overlay">
+                      <span className="project-label">Roland</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="collage-item item-5">
-                  <div className="portfolio-image adius-bg"></div>
+                <div className="project-card pharmacy-card">
+                  <div className="project-image pharmacy-bg">
+                    <div className="project-overlay">
+                      <span className="project-label">Pharmacy</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="collage-item item-6">
-                  <div className="portfolio-image zapier-bg"></div>
+                <div className="project-card kins-card">
+                  <div className="project-image kins-bg">
+                    <div className="project-overlay">
+                      <span className="project-label">Kins</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="collage-item item-7">
-                  <div className="portfolio-image gohenry-bg"></div>
+                <div className="project-card opa-card">
+                  <div className="project-image opa-bg">
+                    <div className="project-overlay">
+                      <span className="project-label">OPA</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="collage-item item-8">
-                  <div className="portfolio-image kins-bg"></div>
+                <div className="project-card reddit-card">
+                  <div className="project-image reddit-bg">
+                    <div className="project-overlay">
+                      <span className="project-label">Reddit</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="collage-item item-9">
-                  <div className="portfolio-image vimeo-bg"></div>
+                <div className="project-card antler-card">
+                  <div className="project-image antler-bg">
+                    <div className="project-overlay">
+                      <span className="project-label">Antler</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
